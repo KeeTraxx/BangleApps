@@ -1,3 +1,6 @@
+const storage = require("Storage");
+const locale = require("locale");
+
 Bangle.setBarometerPower(true, "app");
 
 // add modifiied 4x5 numeric font
