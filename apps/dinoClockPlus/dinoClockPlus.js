@@ -1,8 +1,6 @@
 const storage = require("Storage");
 const locale = require("locale");
 
-Bangle.setBarometerPower(true, "app");
-
 // add modifiied 4x5 numeric font
 (function (graphics) {
   graphics.prototype.setFont4x5NumPretty = function () {
@@ -32,11 +30,14 @@ Bangle.setBarometerPower(true, "app");
 // timeout used to update every minute
 let drawTimeout;
 
+let reading;
+
 // schedule a draw for the next minute
 function queueDraw() {
   if (drawTimeout) clearTimeout(drawTimeout);
   drawTimeout = setTimeout(function () {
     drawTimeout = undefined;
+    Bangle.getPressure().then((newReading) => (reading = newReading));
     draw();
   }, 60000 - (Date.now() % 60000));
 }
@@ -51,17 +52,6 @@ function drawBg() {
   g.reset();
   g.drawImage(bgImg, 0, 90);
 }
-
-function square(x, y, w, e) {
-  g.setColor("#000").fillRect(x, y, x + w, y + w);
-  g.setColor("#fff").fillRect(x + e, y + e, x + w - e, y + w - e);
-}
-
-let reading;
-
-Bangle.on("pressure", function (newReading) {
-  reading = newReading;
-});
 
 function drawLabel(text, x, y, size, font) {
   font = font ? font : "4x5NumPretty";
