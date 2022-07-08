@@ -4,14 +4,18 @@
   "description": "Clock with dino from Chrome",
   "screenshots": [{ "url": "screens/dinoClockPlus.png" }],
   "icon": "dinoClockPlus.png",
-  "version": "0.3",
+  "version": "0.4",
   "type": "clock",
   "tags": "clock, weather, dino, trex, chrome",
   "supports": ["BANGLEJS2"],
   "allow_emulator": true,
   "readme": "README.md",
   "storage": [
-    { "name": "dinoClock.app.js", "url": "dinoClockPlus.js" },
-    { "name": "dinoClock.img", "url": "dinoClockPlusIcon.js", "evaluate": true }
+    { "name": "dinoClockPlus.app.js", "url": "dinoClockPlus.js" },
+    {
+      "name": "dinoClockPlus.img",
+      "url": "dinoClockPlusIcon.js",
+      "evaluate": true
+    }
   ]
 }
