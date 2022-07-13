@@ -1,0 +1,20 @@
+{
+  "id": "fireworks",
+  "name": "Fireworks Game",
+  "description": "Detonate fireworks",
+  "screenshots": [{ "url": "screens/dinoClockPlus.png" }],
+  "icon": "dinoClockPlus.png",
+  "version": "0.1",
+  "tags": "game",
+  "supports": ["BANGLEJS2"],
+  "allow_emulator": true,
+  "readme": "README.md",
+  "storage": [
+    { "name": "fireworks.app.js", "url": "fireworks.app.js" },
+    {
+      "name": "dinoClockPlus.img",
+      "url": "dinoClockPlusIcon.js",
+      "evaluate": true
+    }
+  ]
+}
