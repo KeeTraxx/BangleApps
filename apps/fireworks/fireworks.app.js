@@ -53,7 +53,7 @@ function detonateFirework() {
     nearestFirework.y,
     (Math.random() - 0.5) * 10,
     -3,
-    6 + ~~(Math.random() * 20),
+    2 + ~~(Math.random() * 6),
     nearestFirework.color
   );
 }
@@ -112,7 +112,7 @@ function tickParticle(tDeltaMs, p) {
     x: p.x,
     y: p.y,
   });
-  p.trail = p.trail.slice(0, 10);
+  p.trail = p.trail.slice(0, 5);
   p.vy += fgravity * (tDeltaMs / 1000);
   p.vy *= 1 - airFriction;
   p.vx *= 1 - airFriction;
@@ -125,7 +125,7 @@ function tickFirework(tDeltaMs, p) {
     x: p.x,
     y: p.y,
   });
-  p.trail = p.trail.slice(0, 10);
+  p.trail = p.trail.slice(0, 5);
   p.y += p.vy;
   p.x += p.vx;
   let dx = p.x - p.target.x;
@@ -199,9 +199,10 @@ function draw() {
   lastDraw = now;
 }
 
-setInterval(() => draw(), 1000 / 30);
+setInterval(() => draw(), 1000 / 15);
 
 function start() {
+  score = 0;
   playing = true;
   interval = 3000;
   lives = 3;
