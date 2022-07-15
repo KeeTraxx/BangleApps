@@ -41,7 +41,7 @@ function detonateFirework() {
     f.dist < curr.dist ? f : curr
   );
 
-  if (nearestFirework.dist < nearestFirework.target.size * 2.5) {
+  if (nearestFirework.dist < nearestFirework.target[2] * 2.5) {
     score += Math.max(100 - nearestFirework.dist * 10, 10);
   } else {
     decreaseLife();
@@ -64,20 +64,20 @@ function spawnFirework() {
   }
   const speed = 1.5 + Math.random() * 2;
 
-  const target = {
-    x: 23 + Math.random() * 130,
-    y: 60 + (Math.random() - 0.5) * 30,
-    size: 3 + ~~(Math.random() * 8),
-  };
+  const target = new Uint8Array([
+    23 + Math.random() * 130,
+    60 + (Math.random() - 0.5) * 30,
+    3 + ~~(Math.random() * 8),
+  ]);
 
   // TODO maybe not straight fireworks?
   allFireworks.push({
-    x: target.x,
+    x: target[0],
     y: 176,
     vx: 0,
     vy: -speed,
     target,
-    trail: [],
+    trail: new Uint8Array(10),
     dist: 9999,
     color:
       Math.random() > 0.03
@@ -97,7 +97,7 @@ function explodeFirework(x, y, vx, vy, numParticles, color) {
       y,
       vx: vx + Math.sin((Math.PI * 2 * i) / numParticles) * 5,
       vy: vy - Math.cos((Math.PI * 2 * i) / numParticles) * 5,
-      trail: [],
+      trail: new Uint8Array(10),
       color: color ? color : colors[~~(Math.random() * colors.length)],
     });
   }
@@ -108,11 +108,10 @@ function onScreenTap(x, y) {
 }
 
 function tickParticle(tDeltaMs, p) {
-  p.trail.unshift({
-    x: p.x,
-    y: p.y,
-  });
-  p.trail = p.trail.slice(0, 5);
+  const newTrail = new Uint8Array(10);
+  newTrail.set(p.trail, 2, 8);
+  newTrail.set([p.x, p.y], 0, 2);
+  p.trail = newTrail;
   p.vy += fgravity * (tDeltaMs / 1000);
   p.vy *= 1 - airFriction;
   p.vx *= 1 - airFriction;
@@ -121,15 +120,14 @@ function tickParticle(tDeltaMs, p) {
 }
 
 function tickFirework(tDeltaMs, p) {
-  p.trail.unshift({
-    x: p.x,
-    y: p.y,
-  });
-  p.trail = p.trail.slice(0, 5);
+  const newTrail = new Uint8Array(10);
+  newTrail.set(p.trail, 2, 8);
+  newTrail.set([p.x, p.y], 0, 2);
+  p.trail = newTrail;
   p.y += p.vy;
   p.x += p.vx;
-  let dx = p.x - p.target.x;
-  let dy = p.y - p.target.y;
+  let dx = p.x - p.target[0];
+  let dy = p.y - p.target[1];
   p.dist = Math.sqrt(dx * dx + dy * dy);
   p.age++;
 }
@@ -137,7 +135,9 @@ function tickFirework(tDeltaMs, p) {
 function drawParticle(p) {
   g.setColor(p.color);
   g.drawCircle(p.x, p.y, 2);
-  p.trail.forEach((pos) => g.setPixel(pos.x, pos.y));
+  for (let i = 0; i < 10; i += 2) {
+    g.setPixel(p.trail[i], p.trail[i + 1]);
+  }
 }
 
 function drawFirework(f) {
@@ -148,12 +148,14 @@ function drawFirework(f) {
   }
   g.drawCircle(f.x, f.y, 1);
   g.drawRect(
-    f.target.x - f.target.size,
-    f.target.y - f.target.size,
-    f.target.x + f.target.size,
-    f.target.y + f.target.size
+    f.target[0] - f.target[2],
+    f.target[1] - f.target[2],
+    f.target[0] + f.target[2],
+    f.target[1] + f.target[2]
   );
-  f.trail.forEach((pos) => g.setPixel(pos.x, pos.y));
+  for (let i = 0; i < 10; i += 2) {
+    g.setPixel(f.trail[i], f.trail[i + 1]);
+  }
 }
 
 function removeOOBParticles() {
@@ -203,6 +205,8 @@ function draw() {
 setTimeout(() => draw(), 1000 / 15);
 
 function start() {
+  allFireworks = [];
+  allParticles = [];
   score = 0;
   playing = true;
   interval = 3000;
