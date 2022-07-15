@@ -197,9 +197,10 @@ function draw() {
   }
 
   lastDraw = now;
+  setTimeout(() => draw(), 1000 / 15);
 }
 
-setInterval(() => draw(), 1000 / 15);
+setTimeout(() => draw(), 1000 / 15);
 
 function start() {
   score = 0;
