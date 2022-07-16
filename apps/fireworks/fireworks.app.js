@@ -1,3 +1,5 @@
+E.setFlags({ pretokenise: 1 });
+
 Bangle.setUI({
   mode: "custom",
   touch: (btn, e) => onScreenTap(e.x, e.y),
