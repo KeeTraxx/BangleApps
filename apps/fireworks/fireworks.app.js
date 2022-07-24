@@ -64,6 +64,10 @@ function spawnFirework() {
   if (!playing) {
     return;
   }
+  setTimeout(() => spawnFirework(), interval);
+  if (allFireworks.length > 2) {
+    return;
+  }
   const speed = 1.5 + Math.random() * 2;
 
   const target = new Uint8Array([
@@ -89,7 +93,6 @@ function spawnFirework() {
   });
   interval *= 0.98;
   interval = Math.max(interval, 500);
-  setTimeout(() => spawnFirework(), interval);
 }
 
 function explodeFirework(x, y, vx, vy, numParticles, color) {

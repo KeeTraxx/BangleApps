@@ -4,7 +4,7 @@
   "description": "Detonate fireworks",
   "screenshots": [{ "url": "screens/dinoClockPlus.png" }],
   "icon": "dinoClockPlus.png",
-  "version": "0.3",
+  "version": "0.4",
   "tags": "game",
   "supports": ["BANGLEJS2"],
   "allow_emulator": true,
